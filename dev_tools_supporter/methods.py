@@ -8,6 +8,10 @@ def sout(content, color='white', **kwargs):
 
         Note that you just can see the file change in Normal Terminal (Git Bash does not work)
     """
+    if 'verbose' in kwargs:
+        if kwargs.get('verbose') == False:
+            return
+            
     if 'end' in kwargs:
         kwargs['end'] = kwargs.get('end') + '\033[0m'
     else:
@@ -19,6 +23,8 @@ def sout(content, color='white', **kwargs):
         line_color = '\033[91m'
     elif color == 'yellow':
         line_color = '\033[93m'
+    elif color == 'blue':
+        line_color = '\033[94m'
     else:
         line_color = '\033[0m'
 
@@ -42,8 +48,6 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
                                                      (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
-    # Move cursor up one line
-    print('\033[F', end='')
     print(f'\r{prefix} |{bar}| {percent}% | {iteration} over {total}', end=printEnd)
     # Print New Line on Complete
     if iteration == total:
