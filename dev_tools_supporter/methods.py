@@ -1,4 +1,6 @@
 import time
+import os
+from datetime import datetime as dt
 
 
 def sout(content, color='white', **kwargs):
@@ -9,9 +11,9 @@ def sout(content, color='white', **kwargs):
         Note that you just can see the file change in Normal Terminal (Git Bash does not work)
     """
     if 'verbose' in kwargs:
-        if kwargs.get('verbose') == False:
+        if kwargs['verbose'] == False:
             return
-            
+
     if 'end' in kwargs:
         kwargs['end'] = kwargs.get('end') + '\033[0m'
     else:
@@ -25,10 +27,19 @@ def sout(content, color='white', **kwargs):
         line_color = '\033[93m'
     elif color == 'blue':
         line_color = '\033[94m'
+    elif color == 'magenta':
+        line_color = '\033[95m'
     else:
         line_color = '\033[0m'
 
     print(f'{line_color}{content}', **kwargs)
+
+    date_today = dt.now().strftime('%Y-%m-%d')
+
+    os.makedirs('logs', exist_ok=True)
+
+    with open(f'logs/{date_today}_log.log', 'a', encoding='utf-8') as f:
+        f.write(f'{content}\n')
 
 
 def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
@@ -48,21 +59,8 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
                                                      (iteration / float(total)))
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
+
     print(f'\r{prefix} |{bar}| {percent}% | {iteration} over {total}', end=printEnd)
-    # Print New Line on Complete
+
     if iteration == total:
         print()
-
-
-# if __name__ == '__main__':
-#     max_iter = 100
-
-#     # Initial call to print 0% progress
-#     printProgressBar(
-#         0, max_iter, prefix='Process:', suffix='completed', length=50)
-
-#     for i in range(max_iter):
-#         time.sleep(0.001)
-#         # print('i = ', i)
-#         printProgressBar(
-#             i+1, max_iter, prefix='Process:', suffix='completed', length=50)
