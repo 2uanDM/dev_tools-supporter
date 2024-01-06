@@ -10,6 +10,11 @@ def sout(content, color='white', **kwargs):
 
         Note that you just can see the file change in Normal Terminal (Git Bash does not work)
     """
+    if 'filename' in kwargs:
+        filename = kwargs.get('filename', '')
+    else:
+        filename = 'general'
+
     if 'verbose' in kwargs:
         if kwargs['verbose'] == False:
             return
@@ -32,13 +37,20 @@ def sout(content, color='white', **kwargs):
     else:
         line_color = '\033[0m'
 
+    # Remove kwargs['filename'] or kwargs['verbose] to avoid error
+    if 'filename' in kwargs:
+        del kwargs['filename']
+
+    if 'verbose' in kwargs:
+        del kwargs['verbose']
+
     print(f'{line_color}{content}', **kwargs)
 
     date_today = dt.now().strftime('%Y-%m-%d')
 
-    os.makedirs('logs', exist_ok=True)
+    os.makedirs(f'logs/{date_today}', exist_ok=True)
 
-    with open(f'logs/{date_today}_log.log', 'a', encoding='utf-8') as f:
+    with open(f'logs/{date_today}/{filename}_log.log', 'a', encoding='utf-8') as f:
         f.write(f'{content}\n')
 
 
